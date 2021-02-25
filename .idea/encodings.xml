@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/client-admin8082/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client-admin8082/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client-user8081/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/client-user8081/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cloud-basic-9001/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cloud-basic-9001/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cloud-gateway-9527/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cloud-gateway-9527/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cloud-victor-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cloud-victor-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/seafood-system-9002/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/seafood-system-9002/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/seafood-users-9003/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/seafood-users-9003/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

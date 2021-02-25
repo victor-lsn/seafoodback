@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.victor.seafoodback.dao.UserDao">
+    <resultMap id="userInfoResultMap" type="com.victor.seafoodback.vo.UserInfoVo">
+        <result column="name" property="name"/>
+        <result column="flag" property="flag"/>
+        <result column="phone" property="phone"/>
+        <result column="roleName" property="roleName"/>
+        <collection property="addrs" ofType="com.victor.seafoodback.entity.Address">
+            <result column="addr" property="addr"/>
+            <result column="real_name" property="realName"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllUser" resultType="user">
+        select user.*,role.name roleName from user,role where user.role = role.id
+    </select>
+
+    <select id="getAllUserBySearch" resultType="user">
+        select user.*,role .name roleName from user,role
+        <where>
+            user.role = role.id
+        </where>
+        <if test="username != null">
+            and user.name like concat('%',#{username},'%')
+        </if>
+        <if test="phone != null">
+            and phone like concat('%',#{phone},'%')
+        </if>
+        <if test="role != null">
+            and user.role = #{role}
+        </if>
+    </select>
+
+    <update id="updateStatus">
+        update user set flag = #{flag} where id = #{userId}
+    </update>
+
+    <update id="updateRole">
+        update user set role = #{roleId} where id = #{userId}
+    </update>
+
+    <select id="getUserInfo" resultMap="userInfoResultMap">
+        select user.*,role.name roleName,address.* from user left join address on user.id = address.user_id,role
+        where user.role = role.id and user.id = #{userId}
+    </select>
+</mapper>
