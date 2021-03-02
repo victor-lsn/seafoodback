@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="seafood-users-9003" />
+        <module name="seafood-good-9004" />
         <module name="cloud-gateway-9527" />
         <module name="seafood-system-9002" />
         <module name="client-user8081" />

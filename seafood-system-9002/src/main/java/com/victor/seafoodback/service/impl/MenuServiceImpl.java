@@ -19,7 +19,20 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public CommonResult getAllMenu() {
+        //TODO 没有关联角色与权限表，这是所有权限
         List<Menu> allMenu = menuDao.getAllMenu();
+        return new CommonResult(200, "获取菜单成功", getChildrenList(allMenu));
+    }
+
+    @Override
+    public CommonResult addMenu(Menu menu) {
+        if (menuDao.addMenu(menu) == 1) {
+            return new CommonResult(200, "添加权限成功");
+        }
+        return new CommonResult(444, "添加失败");
+    }
+
+    public List<Menu> getChildrenList(List<Menu> allMenu) {
         ArrayList<Menu> menus = new ArrayList<>();
         for (Menu menu : allMenu) {
             if (menu.getLevel() == 1) {
@@ -33,14 +46,6 @@ public class MenuServiceImpl implements MenuService {
                 menus.add(menu);
             }
         }
-        return new CommonResult(200, "获取菜单成功", menus);
-    }
-
-    @Override
-    public CommonResult addMenu(Menu menu) {
-        if (menuDao.addMenu(menu) == 1) {
-            return new CommonResult(200, "添加权限成功");
-        }
-        return new CommonResult(444, "添加失败");
+        return menus;
     }
 }

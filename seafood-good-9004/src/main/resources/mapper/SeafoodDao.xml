@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.victor.seafoodback.seafoodgood9004.dao.SeafoodDao">
+    <resultMap id="SeafoodMap" type="com.victor.seafoodback.entity.Seafood">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="info" property="info"/>
+        <result column="in_price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="sale_date" property="saleDate"/>
+        <result column="title" property="title"/>
+        <association property="category" javaType="category">
+            <result column="category_id" property="id"/>
+            <result column="categoryName" property="name"/>
+            <result column="category_desc" property="level"/>
+            <result column="level" property="parent"/>
+            <result column="parent" property="categoryDesc"/>
+        </association>
+    </resultMap>
+
+    <select id="getAllSeafoods" resultMap="SeafoodMap">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent
+        from seafood,category
+        where seafood.category_id = category.id
+        <if test="name != null and name != ''">
+            and seafood.name like concat('%',#{name},'%')
+        </if>
+        <if test="lowPrice != null">
+            and out_price >= #{lowPrice}
+        </if>
+        <if test="highPrice != null">
+            and out_price <![CDATA[<=]]> #{highPrice}
+        </if>
+        <if test="lowDate != null">
+            and sale_date >= #{lowDate}
+        </if>
+        <if test="highDate != null">
+            and sale_date <![CDATA[<=]]> #{highDate}
+        </if>
+        <if test="category != null">
+            and category.id = #{category}
+        </if>
+    </select>
+
+    <select id="getSeafoodById" resultMap="SeafoodMap" parameterType="integer">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent
+        from seafood,category
+        where seafood.category_id = category.id
+        and seafood.id = #{id}
+    </select>
+
+</mapper>

@@ -1,9 +1,9 @@
 server:
-  port: 9002
+  port: 9004
 
 spring:
   application:
-    name: seafood-system-9002
+    name: seafood-good-9004
   cloud:
     nacos:
       discovery:
@@ -22,3 +22,5 @@ mybatis:
   mapperLocations: classpath:mapper/*.xml
   #所有entity别名类所在包
   type-aliases-package: com.victor.seafoodback.entity
+  configuration:
+    map-underscore-to-camel-case: true
