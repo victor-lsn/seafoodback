@@ -3,6 +3,7 @@ package com.victor.seafoodback.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.victor.seafoodback.dao.UserDao;
+import com.victor.seafoodback.entity.Address;
 import com.victor.seafoodback.entity.CommonResult;
 import com.victor.seafoodback.entity.User;
 import com.victor.seafoodback.service.UserService;
@@ -53,6 +54,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public CommonResult getUserInfo(Integer userId) {
         return new CommonResult(200,"",userDao.getUserInfo(userId));
+    }
+
+    @Override
+    public CommonResult getAllAddress(Integer userId) {
+        List<Address> allAddressByUserId = userDao.getAllAddressByUserId(userId);
+        return new CommonResult(200,"获取用户地址成功",allAddressByUserId);
+    }
+
+    @Override
+    public CommonResult addAddress(Address address) {
+        userDao.addAddress(address);
+        return new CommonResult(200,"添加地址成功");
+    }
+
+    @Override
+    public CommonResult deleteAddress(Integer id) {
+        userDao.deleteAddress(id);
+        return new CommonResult(200,"成功删除地址");
+    }
+
+    @Override
+    public CommonResult getAllWaiter() {
+        return new CommonResult(200,"获取客服成功",userDao.getAllWaiter());
     }
 
 

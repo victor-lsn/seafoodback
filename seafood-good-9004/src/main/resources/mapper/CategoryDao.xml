@@ -18,4 +18,8 @@
     <delete id="deleteCategory" parameterType="integer">
         delete from category where id = #{categoryId}
     </delete>
+
+    <select id="getParentCategoryVo" resultType="com.victor.seafoodback.vo.CategoryVo">
+        select * from category where level = 1
+    </select>
 </mapper>

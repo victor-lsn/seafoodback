@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.victor.seafoodback.seafoodorder9006.dao.OrderDao">
+
+    <resultMap id="orderResultMap" type="com.victor.seafoodback.entity.Order">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userAddr" column="user_addr"/>
+        <result property="createDate" column="create_date"/>
+        <result property="cost" column="cost"/>
+        <result property="pay" column="pay"/>
+        <result property="realName" column="realName"/>
+        <result property="serialNumber" column="serial_number"/>
+        <result property="status" column="status"/>
+        <collection property="children" ofType="com.victor.seafoodback.vo.OrderSeafood" javaType="list" column="id"
+                    select="getOrderSeafood"></collection>
+    </resultMap>
+
+    <resultMap id="orderSeafoodMap" type="com.victor.seafoodback.vo.OrderSeafood">
+        <result column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="seafood_count" property="count"/>
+        <association property="seafood" javaType="seafood" column="seafood_id" select="getSeafood"></association>
+    </resultMap>
+
+    <resultMap id="SeafoodMap3" type="com.victor.seafoodback.entity.Seafood">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="info" property="info"/>
+        <result column="in_price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="sale_date" property="saleDate"/>
+        <result column="title" property="title"/>
+        <result column="sale_count" property="saleCount"/>
+        <collection property="pics" ofType="seafoodPic" javaType="list" select="queryPicBySeafoodId" column="id">
+        </collection>
+    </resultMap>
+
+    <resultMap id="SeafoodMap4" type="com.victor.seafoodback.entity.SeafoodPic">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <insert id="addOrder" parameterType="com.victor.seafoodback.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into shop_order(user_id,user_addr,create_date,cost,pay,realName,serial_number)
+        values (#{userId},#{userAddr},#{createDate},#{cost},#{pay},#{realName},#{serialNumber})
+    </insert>
+
+    <insert id="addOrderSeafood">
+        insert into order_seafood(order_id,seafood_id,seafood_count) values (#{orderId},#{seafoodId},#{seafoodCount})
+    </insert>
+
+    <select id="getAddressById" parameterType="integer" resultType="address">
+        select * from address where id = #{id}
+    </select>
+
+    <select id="getSeafoodById" resultType="seafood" parameterType="integer">
+        select * from seafood where id = #{id}
+    </select>
+
+    <select id="getAllOrder" resultMap="orderResultMap">
+        select * from shop_order where 1=1
+        <if test="serialNumber !=''">
+            and serial_number = #{serialNumber}
+        </if>
+        <if test="lowDate != null">
+            and create_date >= #{lowDate}
+        </if>
+        <if test="highDate != null">
+            and create_date <![CDATA[<=]]> #{highDate}
+        </if>
+        <if test="status !=''">
+            and status = #{status}
+        </if>
+        order by create_date desc
+    </select>
+
+    <select id="getAllOrderByUserId" resultMap="orderResultMap">
+        select * from shop_order where user_id = #{userId} order by create_date desc
+    </select>
+
+    <select id="getOrderSeafood" resultMap="orderSeafoodMap">
+        select * from order_seafood where order_id = #{id}
+    </select>
+
+    <select id="getSeafood" resultMap="SeafoodMap3">
+        select * from seafood where id = #{seafood_id}
+    </select>
+
+
+    <select id="queryPicBySeafoodId" resultMap="SeafoodMap4">
+        select * from seafood_pic where seafood_id = #{id}
+    </select>
+
+    <update id="updateOrder" parameterType="integer">
+        update shop_order set status = 1 where id= #{orderId}
+    </update>
+
+    <update id="updateOrder2">
+        update shop_order set status = #{status} where serial_number= #{serialNumber}
+    </update>
+</mapper>

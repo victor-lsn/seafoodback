@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @RestController
 public class CategoryController {
@@ -35,5 +36,10 @@ public class CategoryController {
     @PostMapping("/deleteCategory")
     public CommonResult deleteCategory(@RequestParam("categoryId") Integer categoryId) {
         return categoryService.deleteCategory(categoryId);
+    }
+
+    @PostMapping("/getParentCategoryVo")
+    public CommonResult getParentCategoryVo(){
+        return categoryService.getParentCategoryVo();
     }
 }

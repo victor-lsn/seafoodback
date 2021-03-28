@@ -9,7 +9,7 @@ import java.util.Locale;
 public class MyTimeUtil {
 
     public static Date dealDateFormat(String oldDate) {
-        if (oldDate == null){
+        if (oldDate == null || oldDate == ""){
             return null;
         }
         Date date1 = null;

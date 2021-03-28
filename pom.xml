@@ -16,6 +16,8 @@
     <module>client-admin8082</module>
     <module>seafood-users-9003</module>
       <module>seafood-good-9004</module>
+      <module>seafood-media-9005</module>
+      <module>seafood-order-9006</module>
   </modules>
   <packaging>pom</packaging>
 

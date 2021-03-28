@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.victor.seafoodback.seafoodmedia9005.dao.AdvertDao">
+    <select id="getAllAdverts" resultType="advert">
+        select * from advert limit 0,7
+    </select>
+
+    <update id="updateAdvert">
+        update advert set name = #{name} where id = #{id}
+    </update>
+</mapper>

@@ -1,5 +1,6 @@
 package com.victor.seafoodback.service;
 
+import com.victor.seafoodback.entity.Address;
 import com.victor.seafoodback.entity.CommonResult;
 import com.victor.seafoodback.entity.User;
 import org.apache.ibatis.annotations.Param;
@@ -18,4 +19,12 @@ public interface UserService {
     CommonResult updateRole(Integer userId, Integer roleId);
 
     CommonResult getUserInfo(Integer userId);
+
+    CommonResult getAllAddress(Integer userId);
+
+    CommonResult addAddress(Address address);
+
+    CommonResult deleteAddress(Integer id);
+
+    CommonResult getAllWaiter();
 }

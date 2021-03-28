@@ -47,4 +47,24 @@
         select user.*,role.name roleName,address.* from user left join address on user.id = address.user_id,role
         where user.role = role.id and user.id = #{userId}
     </select>
+
+    <select id="getAllAddressByUserId" resultType="com.victor.seafoodback.entity.Address" parameterType="integer">
+        select * from address where user_id = #{userId}
+    </select>
+
+    <insert id="addAddress" parameterType="address">
+        insert into address(addr,user_id,real_name) values (#{addr},#{userId},#{realName})
+    </insert>
+
+    <delete id="deleteAddress" parameterType="integer">
+        delete from address where id = #{id}
+    </delete>
+
+    <select id="getAllWaiter" resultType="user">
+        select * from user where role = 2
+    </select>
+
+    <select id="getUserById" resultType="user" parameterType="integer">
+        select * from user where id = #{id}
+    </select>
 </mapper>

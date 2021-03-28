@@ -26,7 +26,7 @@ public class MyGateWayFilter implements GlobalFilter, Ordered {
         System.out.println("----------------全局过滤器------------------------");
         System.out.println(exchange.getRequest().getURI());
         String path = exchange.getRequest().getURI().toString();
-        if (path.contains("login") || path.contains("register")){
+        if (path.contains("login") || path.contains("register") || path.contains("alipay")){
             return chain.filter(exchange);//放行
         }
         String token = exchange.getRequest().getHeaders().getFirst("Authorization");

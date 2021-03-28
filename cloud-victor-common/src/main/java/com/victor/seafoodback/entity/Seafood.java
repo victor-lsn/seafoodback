@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,4 +22,6 @@ public class Seafood {
     private Date saleDate;
     private String title;
     private String info;
+    private List<SeafoodPic> pics;
+    private Integer saleCount;
 }

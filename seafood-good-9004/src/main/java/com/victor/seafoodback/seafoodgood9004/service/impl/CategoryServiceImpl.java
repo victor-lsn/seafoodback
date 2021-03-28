@@ -42,6 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
 
+
     public List<Category> getChildrenList(List<Category> allCategories) {
         ArrayList<Category> categories = new ArrayList<>();
         for (Category category : allCategories) {
@@ -59,5 +60,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categories;
     }
 
+
+    @Override
+    public CommonResult getParentCategoryVo() {
+        return new CommonResult(200,"获取一级分类成功",categoryDao.getParentCategoryVo());
+    }
 
 }

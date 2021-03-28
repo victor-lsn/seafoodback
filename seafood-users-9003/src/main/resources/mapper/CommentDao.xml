@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.victor.seafoodback.dao.CommentDao">
+
+    <select id="getAllCommentBySeafood" resultType="comment">
+        select * from comment where seafood_id = #{seafoodId}
+    </select>
+
+    <insert id="addComment" parameterType="com.victor.seafoodback.entity.Comment">
+        insert into comment(from_user_id,to_user_id,seafood_id,parent,level,content,date,from_user_name,to_user_name)
+        values(#{fromUserId},#{toUserId},#{seafoodId},#{parent},#{level},#{content},#{date},#{fromUserName},#{toUserName})
+    </insert>
+</mapper>

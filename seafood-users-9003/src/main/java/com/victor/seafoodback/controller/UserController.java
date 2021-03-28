@@ -1,5 +1,6 @@
 package com.victor.seafoodback.controller;
 
+import com.victor.seafoodback.entity.Address;
 import com.victor.seafoodback.entity.CommonResult;
 import com.victor.seafoodback.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @RestController
 public class UserController {
@@ -39,4 +41,31 @@ public class UserController {
     public CommonResult getUserInfo(@RequestParam("userId") Integer userId){
         return userService.getUserInfo(userId);
     }
+
+    @PostMapping("/getAllAddress")
+    public CommonResult getAllAddress(@RequestParam("param") Integer userId){
+        return userService.getAllAddress(userId);
+    }
+
+    @PostMapping("/addAddress")
+    public CommonResult addAddress(@RequestParam("addr") String addr,@RequestParam("userId")Integer userId,
+                                   @RequestParam("realName") String realName){
+        Address address = new Address();
+        address.setAddr(addr);
+        address.setUserId(userId);
+        address.setRealName(realName);
+        return userService.addAddress(address);
+    }
+
+    @PostMapping("/deleteAddress")
+    public CommonResult deleteAddress(@RequestParam("id")Integer id){
+        return userService.deleteAddress(id);
+    }
+
+
+    @PostMapping("/getAllWaiter")
+    public CommonResult getAllWaiter(){
+        return userService.getAllWaiter();
+    }
+
 }

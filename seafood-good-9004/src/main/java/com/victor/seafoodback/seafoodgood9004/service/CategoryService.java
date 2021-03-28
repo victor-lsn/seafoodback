@@ -13,4 +13,6 @@ public interface CategoryService {
     CommonResult addCategory(Category category);
 
     CommonResult deleteCategory(Integer categoryId);
+
+    CommonResult getParentCategoryVo();
 }
