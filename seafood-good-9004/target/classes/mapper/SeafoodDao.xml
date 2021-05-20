@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.victor.seafoodback.seafoodgood9004.dao.SeafoodDao">
+    <resultMap id="SeafoodMap" type="com.victor.seafoodback.entity.Seafood">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="info" property="info"/>
+        <result column="in_price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="sale_date" property="saleDate"/>
+        <result column="title" property="title"/>
+        <result column="sale_count" property="saleCount"/>
+        <association property="category" javaType="category">
+            <result column="category_id" property="id"/>
+            <result column="categoryName" property="name"/>
+            <result column="category_desc" property="level"/>
+            <result column="level" property="parent"/>
+            <result column="parent" property="categoryDesc"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="SeafoodMap2" type="com.victor.seafoodback.entity.Seafood">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="info" property="info"/>
+        <result column="in_price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="sale_date" property="saleDate"/>
+        <result column="title" property="title"/>
+        <result column="sale_count" property="saleCount"/>
+        <association property="category" javaType="category">
+            <result column="category_id" property="id"/>
+            <result column="categoryName" property="name"/>
+            <result column="category_desc" property="level"/>
+            <result column="level" property="parent"/>
+            <result column="parent" property="categoryDesc"/>
+        </association>
+        <collection property="pics" ofType="seafoodPic">
+            <result property="id" column="pic_id"/>
+            <result property="name" column="pic_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAllSeafoods" resultMap="SeafoodMap">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent
+        from seafood,category
+        where seafood.category_id = category.id
+        <if test="name != null and name != ''">
+            and seafood.name like concat('%',#{name},'%')
+        </if>
+        <if test="lowPrice != null">
+            and out_price >= #{lowPrice}
+        </if>
+        <if test="highPrice != null">
+            and out_price <![CDATA[<=]]> #{highPrice}
+        </if>
+        <if test="lowDate != null">
+            and sale_date >= #{lowDate}
+        </if>
+        <if test="highDate != null">
+            and sale_date <![CDATA[<=]]> #{highDate}
+        </if>
+        <if test="category != null">
+            and category.id = #{category}
+        </if>
+    </select>
+
+    <select id="getSeafoodById" resultMap="SeafoodMap2" parameterType="integer">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,
+        seafood_pic.id pic_id,seafood_pic.name pic_name
+        from category,seafood left join seafood_pic on seafood.id = seafood_pic.seafood_id
+        where seafood.category_id = category.id
+        and seafood.id = #{id}
+    </select>
+
+    <insert id="addGoodPic" parameterType="seafoodPic">
+        insert into seafood_pic(seafood_id,name,pic_path) values(#{seafoodId},#{name},#{picPath})
+    </insert>
+
+    <update id="updateGoodPic" parameterType="com.victor.seafoodback.entity.SeafoodPic">
+        update seafood_pic set seafood_id = #{seafoodId} where id = #{id}
+    </update>
+
+    <insert id="addSeafood" parameterType="seafood" useGeneratedKeys="true" keyProperty="id">
+        insert into seafood(name,count,discount,info,in_price,out_price,sale_date,title,category_id)
+        values(#{name},#{count},#{discount},#{info},#{inPrice},#{outPrice},#{saleDate},#{title},#{categoryId})
+    </insert>
+
+    <update id="updateSeafood" parameterType="seafood">
+        update seafood set name = #{name},count = #{count},discount = #{discount},info = #{info},
+        in_price = #{inPrice},out_price = #{outPrice},title = #{title},category_id = #{categoryId}
+        where id = #{id}
+    </update>
+
+    <select id="getSeafoodPic" resultType="integer" parameterType="map">
+        select count(0) from seafood_pic where seafood_id = #{seafoodId} and name = #{picName}
+    </select>
+
+    <delete id="deleteSeafoodPic" parameterType="map">
+        delete from seafood_pic where seafood_id = #{seafoodId}
+        <if test="name != null">
+            and name = #{picName}
+        </if>
+    </delete>
+
+    <delete id="deleteSeafood" parameterType="integer">
+        delete from seafood where id = #{id}
+    </delete>
+
+    <insert id="batchAddSeafood" parameterType="list" useGeneratedKeys="true" keyProperty="id">
+        insert into seafood(name,count,discount,info,in_price,out_price,sale_date,title,category_id)
+        values
+        <foreach collection ="list" item="seafood" separator =",">
+            (#{seafood.name},#{seafood.count},#{seafood.discount},#{seafood.info},#{seafood.inPrice},#{seafood.outPrice},#{seafood.saleDate},#{seafood.title},#{seafood.categoryId})
+        </foreach >
+    </insert>
+
+    <insert id="batchSeafoodPic" parameterType="list">
+        insert into seafood_pic(seafood_id,name)
+        values
+        <foreach collection="list" item="seafoodPic" separator=",">
+            (#{seafoodPic.seafoodId},#{seafoodPic.name})
+        </foreach>
+    </insert>
+
+    <select id="getFireGood" resultMap="SeafoodMap2">
+        select a.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
+        from category,(select seafood.* from seafood  ORDER BY sale_count DESC limit 11 ) as a
+        right join seafood_pic on a.id = seafood_pic.seafood_id
+        where a.category_id = category.id
+    </select>
+
+    <resultMap id="SeafoodMap3" type="com.victor.seafoodback.entity.Seafood">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="info" property="info"/>
+        <result column="in_price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="sale_date" property="saleDate"/>
+        <result column="title" property="title"/>
+        <result column="sale_count" property="saleCount"/>
+        <association property="category" javaType="category">
+            <result column="category_id" property="id"/>
+            <result column="categoryName" property="name"/>
+            <result column="category_desc" property="level"/>
+            <result column="level" property="parent"/>
+            <result column="parent" property="categoryDesc"/>
+        </association>
+        <collection property="pics" ofType="seafoodPic" javaType="list" select="queryPicBySeafoodId" column="id">
+        </collection>
+    </resultMap>
+
+    <resultMap id="SeafoodMap4" type="com.victor.seafoodback.entity.SeafoodPic">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getAllGoods2" resultMap="SeafoodMap2">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
+        from seafood,category,seafood_pic
+        where seafood.category_id = category.id and seafood.id = seafood_pic.seafood_id order by out_price ${paixu}
+        <if test="name != null and name != ''">
+            and seafood.name like concat('%',#{name},'%')
+        </if>
+        <if test="lowPrice != null">
+            and out_price >= #{lowPrice}
+        </if>
+        <if test="highPrice != null">
+            and out_price <![CDATA[<=]]> #{highPrice}
+        </if>
+    </select>
+
+    <select id="getAllGoods" resultMap="SeafoodMap3">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
+        from seafood,category,seafood_pic
+        where seafood.category_id = category.id order by out_price ${paixu}
+        <if test="name != null and name != ''">
+            and seafood.name like concat('%',#{name},'%')
+        </if>
+        <if test="lowPrice != null">
+            and out_price >= #{lowPrice}
+        </if>
+        <if test="highPrice != null">
+            and out_price <![CDATA[<=]]> #{highPrice}
+        </if>
+    </select>
+
+    <select id="queryPicBySeafoodId" resultMap="SeafoodMap4">
+        select * from seafood_pic where seafood_id = #{id}
+    </select>
+
+</mapper>

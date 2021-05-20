@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.victor.seafoodback.seafoodgood9004.dao.CategoryDao">
+    <select id="getAllCategories" resultType="category">
+        select * from category
+    </select>
+
+    <insert id="addCategory" parameterType="category">
+        insert into category(name,category_desc,parent,level)
+        values(#{name},#{categoryDesc},#{parent},#{level})
+    </insert>
+
+    <select id="getCategoryListByParent" parameterType="integer" resultType="category">
+        select * from category where parent = #{categoryId}
+    </select>
+
+    <delete id="deleteCategory" parameterType="integer">
+        delete from category where id = #{categoryId}
+    </delete>
+
+    <select id="getParentCategoryVo" resultType="com.victor.seafoodback.vo.CategoryVo">
+        select * from category where level = 1
+    </select>
+</mapper>

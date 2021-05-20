@@ -1,16 +1,16 @@
 server:
-  port: 9006
+  port: 9004
 
 spring:
   application:
-    name: seafood-order-9006
+    name: seafood-good-9004
   cloud:
     nacos:
       discovery:
         server-addr: localhost:8848
   datasource:
     driver-class-name: org.gjt.mm.mysql.Driver
-    url: jdbc:mysql://127.0.0.1:3306/seafood_sell_system?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/seafood_sell_system?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: 123456
 

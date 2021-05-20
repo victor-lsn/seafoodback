@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.victor.seafoodback.dao.ShopCarDao">
+
+    <resultMap id="shopCarMap" type="com.victor.seafoodback.entity.ShopCar">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="seafood_id" property="seafoodId"/>
+        <result column="count" property="count"/>
+        <association property="seafood" javaType="com.victor.seafoodback.entity.SeafoodPic" select="getSeafoodById" column="seafood_id">
+        </association>
+    </resultMap>
+
+    <resultMap id="SeafoodMap2" type="com.victor.seafoodback.entity.Seafood">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="count" property="count"/>
+        <result column="discount" property="discount"/>
+        <result column="info" property="info"/>
+        <result column="in_price" property="inPrice"/>
+        <result column="out_price" property="outPrice"/>
+        <result column="sale_date" property="saleDate"/>
+        <result column="title" property="title"/>
+        <result column="sale_count" property="saleCount"/>
+        <association property="category" javaType="category">
+            <result column="category_id" property="id"/>
+            <result column="categoryName" property="name"/>
+            <result column="category_desc" property="level"/>
+            <result column="level" property="parent"/>
+            <result column="parent" property="categoryDesc"/>
+        </association>
+        <collection property="pics" ofType="seafoodPic">
+            <result property="id" column="pic_id"/>
+            <result property="name" column="pic_name"/>
+        </collection>
+    </resultMap>
+
+    <insert id="addSeafoodToCar">
+        insert into shop_car(user_id,seafood_id) values (#{userId},#{seafoodId})
+    </insert>
+
+    <delete id="deleteSeafoodFromCar">
+        delete from shop_car where user_id = #{userId} and seafood_id = #{seafoodId}
+    </delete>
+
+    <select id="getShopCar" parameterType="integer" resultMap="shopCarMap">
+        select * from shop_car where user_id = #{userId}
+    </select>
+
+    <select id="getSeafoodById" resultMap="SeafoodMap2" parameterType="integer">
+        select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,
+        seafood_pic.id pic_id,seafood_pic.name pic_name
+        from category,seafood left join seafood_pic on seafood.id = seafood_pic.seafood_id
+        where seafood.category_id = category.id
+        and seafood.id = #{seafood_id}
+    </select>
+
+    <select id="selectShopCarBy2Id" resultType="com.victor.seafoodback.entity.ShopCar">
+        select * from shop_car where user_id = #{userId} and seafood_id = #{seafoodId}
+    </select>
+</mapper>

@@ -39,6 +39,7 @@ public class OrderController {
 
     @PostMapping("/getOrderByUser")
     public CommonResult getOrderByUser(@RequestParam("userId") Integer userId) {
+        System.out.println(orderService.getAllOrderByUserId(userId));
         return orderService.getAllOrderByUserId(userId);
     }
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.victor.seafoodback.seafoodmedia9005.dao.NewsDao">
+    <select id="getAllNews" resultType="news">
+        select * from news where 1 = 1
+        <if test="lowDate != null">
+            and create_date >= #{lowDate}
+        </if>
+        <if test="highDate != null">
+            and create_date <![CDATA[<=]]> #{highDate}
+        </if>
+        order by create_date desc
+    </select>
+
+    <insert id="addNews" parameterType="news">
+        insert into news(content,create_date) values (#{content},#{createDate})
+    </insert>
+
+    <delete id="deleteNews" parameterType="news">
+        delete from news where id = #{id}
+    </delete>
+
+    <update id="updateNews" parameterType="news">
+        update news set content = #{content} where id = #{id}
+    </update>
+
+</mapper>
