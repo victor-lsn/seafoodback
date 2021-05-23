@@ -19,4 +19,7 @@ public interface UserRegiter {
 
     @PostMapping("/login")
     CommonResult login(@RequestParam("phone") String phone,@RequestParam("password")String password,@RequestParam("code")String code);
+
+    @PostMapping("/getCode")
+    CommonResult getCode();
 }

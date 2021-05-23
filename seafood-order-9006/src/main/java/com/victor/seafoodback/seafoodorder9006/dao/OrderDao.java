@@ -33,4 +33,6 @@ public interface OrderDao {
     Integer updateOrder2(@Param("serialNumber")String serialNumber,@Param("status") Integer status);
 
     Seafood getSeafood(Integer seafood_id);
+
+
 }

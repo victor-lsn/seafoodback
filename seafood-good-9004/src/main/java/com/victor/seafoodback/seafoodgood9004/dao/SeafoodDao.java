@@ -42,4 +42,6 @@ public interface SeafoodDao {
 
     List<Seafood> getAllGoods(@Param("name")String name, @Param("lowPrice")Double lowPrice, @Param("highPrice")Double highPrice,
                               @Param("paixu")String paixu);
+
+
 }

@@ -22,4 +22,9 @@ public class RegiterController {
     public CommonResult login(@RequestParam("phone") String phone, @RequestParam("password") String password, @RequestParam("code") String code) {
         return userRegiter.login(phone, password, code);
     }
+
+    @PostMapping("/getCode")
+    public CommonResult getCode() {
+        return userRegiter.getCode();
+    }
 }
