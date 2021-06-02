@@ -13,4 +13,8 @@
     <select id="login" resultType="user" parameterType="user">
         select * from user where phone = #{phone} and password = #{password}
     </select>
+
+    <select id="getUserStatus" resultType="integer">
+        select flag from user where phone = #{phone}
+    </select>
 </mapper>

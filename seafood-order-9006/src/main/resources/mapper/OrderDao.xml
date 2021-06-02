@@ -45,20 +45,25 @@
     </resultMap>
 
     <insert id="addOrder" parameterType="com.victor.seafoodback.entity.Order" useGeneratedKeys="true" keyProperty="id">
-        insert into shop_order(user_id,user_addr,create_date,cost,pay,realName,serial_number)
-        values (#{userId},#{userAddr},#{createDate},#{cost},#{pay},#{realName},#{serialNumber})
+        insert into shop_order(user_id, user_addr, create_date, cost, pay, realName, serial_number)
+        values (#{userId}, #{userAddr}, #{createDate}, #{cost}, #{pay}, #{realName}, #{serialNumber})
     </insert>
 
     <insert id="addOrderSeafood">
-        insert into order_seafood(order_id,seafood_id,seafood_count) values (#{orderId},#{seafoodId},#{seafoodCount})
+        insert into order_seafood(order_id, seafood_id, seafood_count)
+        values (#{orderId}, #{seafoodId}, #{seafoodCount})
     </insert>
 
     <select id="getAddressById" parameterType="integer" resultType="address">
-        select * from address where id = #{id}
+        select *
+        from address
+        where id = #{id}
     </select>
 
     <select id="getSeafoodById" resultType="seafood" parameterType="integer">
-        select * from seafood where id = #{id}
+        select *
+        from seafood
+        where id = #{id}
     </select>
 
     <select id="getAllOrder" resultMap="orderResultMap">
@@ -79,27 +84,45 @@
     </select>
 
     <select id="getAllOrderByUserId" resultMap="orderResultMap">
-        select * from shop_order where user_id = #{userId} order by create_date desc
+        select *
+        from shop_order
+        where user_id = #{userId}
+        order by create_date desc
     </select>
 
     <select id="getOrderSeafood" resultMap="orderSeafoodMap">
-        select * from order_seafood where order_id = #{id}
+        select *
+        from order_seafood
+        where order_id = #{id}
     </select>
 
     <select id="getSeafood" resultMap="SeafoodMap3">
-        select * from seafood where id = #{seafood_id}
+        select *
+        from seafood
+        where id = #{seafood_id}
     </select>
 
 
     <select id="queryPicBySeafoodId" resultMap="SeafoodMap4">
-        select * from seafood_pic where seafood_id = #{id}
+        select *
+        from seafood_pic
+        where seafood_id = #{id}
     </select>
 
     <update id="updateOrder" parameterType="integer">
-        update shop_order set status = 1 where id= #{orderId}
+        update shop_order
+        set status = 1
+        where id = #{orderId}
     </update>
 
     <update id="updateOrder2">
-        update shop_order set status = #{status} where serial_number= #{serialNumber}
+        update shop_order
+        set status = #{status}
+        where serial_number = #{serialNumber}
+    </update>
+
+    <update id="updateSeafood">
+        update seafood set count = count - #{count} ,sale_count = sale_count + #{count}
+        where id = #{seafoodId}
     </update>
 </mapper>

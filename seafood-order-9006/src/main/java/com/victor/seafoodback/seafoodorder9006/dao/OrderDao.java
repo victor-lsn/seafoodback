@@ -35,4 +35,5 @@ public interface OrderDao {
     Seafood getSeafood(Integer seafood_id);
 
 
+    Integer updateSeafood(@Param("seafoodId") Integer seafoodId,@Param("count") Integer count);
 }

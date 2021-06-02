@@ -31,6 +31,10 @@ public class SeafoodVoExcel {
     private String info;
     @ExcelProperty("图片")
     private String pics;
+    @ExcelProperty("规格")
+    private Float weight;
+    @ExcelProperty("产地")
+    private String seafoodSource;
 
     public SeafoodVoExcel() {
         this.saleDate = new Date();

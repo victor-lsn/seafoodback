@@ -50,7 +50,8 @@ public class SeafoodController {
                                    @RequestParam("outPrice")Double outPrice,@RequestParam("count")Integer count,
                                    @RequestParam("discount")Double discount,@RequestParam("categoryId")Integer categoryId,
                                    @RequestParam("title")String title,@RequestParam("info")String info,
-                                   @RequestParam("picName")String picName){
+                                   @RequestParam("picName")String picName,@RequestParam("weight")Float weight,
+                                   @RequestParam("seafoodSource")String seafoodSource){
         Seafood seafood = new Seafood();
         seafood.setName(name);
         seafood.setInPrice(inPrice);
@@ -61,6 +62,8 @@ public class SeafoodController {
         seafood.setCategoryId(categoryId);
         seafood.setDiscount(discount);
         seafood.setSaleDate(new Date());
+        seafood.setWeight(weight);
+        seafood.setSeafoodSource(seafoodSource);
         return seafoodService.addSeafood(seafood,picName);
     }
 
@@ -69,7 +72,9 @@ public class SeafoodController {
                                       @RequestParam("outPrice")Double outPrice,@RequestParam("count")Integer count,
                                       @RequestParam("discount")Double discount,@RequestParam("categoryId")Integer categoryId,
                                       @RequestParam("title")String title,@RequestParam("info")String info,
-                                      @RequestParam(value = "picName",required = false)String picName,@RequestParam("id")Integer id){
+                                      @RequestParam(value = "picName",required = false)String picName,@RequestParam("id")Integer id,
+                                      @RequestParam("weight")Float weight,
+                                      @RequestParam("seafoodSource")String seafoodSource){
         Seafood seafood = new Seafood();
         seafood.setId(id);
         seafood.setName(name);
@@ -81,6 +86,8 @@ public class SeafoodController {
         seafood.setCategoryId(categoryId);
         seafood.setDiscount(discount);
         seafood.setSaleDate(new Date());
+        seafood.setWeight(weight);
+        seafood.setSeafoodSource(seafoodSource);
         return seafoodService.updateSeafood(seafood,picName);
     }
 
@@ -112,6 +119,7 @@ public class SeafoodController {
             excelReader.read(readSheet);
             // 这里千万别忘记关闭，读的时候会创建临时文件，到时磁盘会崩的
             excelReader.finish();*/
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,5 +139,23 @@ public class SeafoodController {
                                        @RequestParam("pageNo")Integer pageNo,
                                        @RequestParam("pageSize")Integer pageSize) {
         return seafoodService.getAllGoods(name, lowPrice, highPrice, paixu, pageNo, pageSize);
+    }
+
+    @PostMapping("/getSearchGoods")
+    public CommonResult getSearchGoods(@RequestParam(value = "keywords",required = false) String keywords,
+                                       @RequestParam("paixu") String paixu,
+                                       @RequestParam(value = "categoryId",required = false)Integer categoryId) {
+        System.out.println(keywords);
+        return seafoodService.getSearchGoods(keywords, paixu,categoryId);
+    }
+
+    @PostMapping("/getSeafoodCount")
+    public CommonResult getSeafoodCount(@RequestParam("id") Integer id) {
+        return seafoodService.getSeafoodCount(id);
+    }
+
+    @PostMapping("/getSeafoodCountByList")
+    public CommonResult getSeafoodCountByList(@RequestParam("seafoodList[]") String[] seafoodList) {
+        return seafoodService.getSeafoodCountByList(seafoodList);
     }
 }

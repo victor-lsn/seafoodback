@@ -9,4 +9,19 @@
     <insert id="addMenu" parameterType="menu">
         insert into permission(name,path,icon,parent,level) values(#{name},#{path},#{icon},#{parent},#{level})
     </insert>
+
+    <select id="getMenuByRoleId" resultType="menu">
+        select * from permission,role_permission
+        where permission.id = role_permission.permission_id
+          and role_permission.role_id = #{roleId}
+    </select>
+
+    <select id="getMenuById" resultType="menu">
+        select * from permission where id = #{permissionId}
+    </select>
+
+    <update id="updateMenuById">
+        update permission set name = #{name},parent = #{parent},path = #{path},icon = #{icon}
+        where id = #{id}
+    </update>
 </mapper>

@@ -35,12 +35,11 @@ public class CategoryServiceImpl implements CategoryService {
     public CommonResult deleteCategory(Integer categoryId) {
         List<Category> categories = categoryDao.getCategoryListByParent(categoryId);
         if (categories.size() > 0) {
-            return new CommonResult(444,"删除分类失败，含有子分类");
+            return new CommonResult(444, "删除分类失败，含有子分类");
         }
         categoryDao.deleteCategory(categoryId);
-        return new CommonResult(200,"删除分类成功");
+        return new CommonResult(200, "删除分类成功");
     }
-
 
 
     public List<Category> getChildrenList(List<Category> allCategories) {
@@ -63,7 +62,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CommonResult getParentCategoryVo() {
-        return new CommonResult(200,"获取一级分类成功",categoryDao.getParentCategoryVo());
+        return new CommonResult(200, "获取一级分类成功", categoryDao.getParentCategoryVo());
+    }
+
+    @Override
+    public CommonResult getCategoryById(Integer id) {
+        return new CommonResult(200, "根据ID获取商品分类成功", categoryDao.getCategoryById(id));
+    }
+
+    @Override
+    public CommonResult updateCategory(Category category) {
+        if (categoryDao.updateCategory(category) == 1){
+            return new CommonResult(200,"更新海鲜分类成功");
+        }
+        return new CommonResult(444,"更新海鲜分类失败");
     }
 
 }

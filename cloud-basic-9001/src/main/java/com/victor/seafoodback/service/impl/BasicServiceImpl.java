@@ -29,6 +29,12 @@ public class BasicServiceImpl implements BasicService {
 
     @Override
     public CommonResult login(User user) {
+        if(basicDao.getUserByPhone(user.getPhone()) == 0){
+            return new CommonResult(400,"不存在此用户");
+        }
+        if (basicDao.getUserStatus(user) == 0){
+            return new CommonResult(400,"该用户已被管理员禁用，联系管理员解禁");
+        }
         user.setPassword(Md5Util.StringInMd5(user.getPassword()));
         User login = basicDao.login(user);
         if (login == null) {

@@ -24,4 +24,6 @@ public class Seafood {
     private String info;
     private List<SeafoodPic> pics;
     private Integer saleCount;
+    private Float weight;
+    private String seafoodSource;
 }

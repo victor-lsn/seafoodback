@@ -30,4 +30,10 @@ public interface SeafoodService {
     CommonResult getFireGood();
 
     CommonResult getAllGoods(String name,Double lowPrice,Double highPrice,String paixu,Integer pageNo,Integer pageSize);
+
+    CommonResult getSearchGoods(String keywords,String paixu,Integer categoryId);
+
+    CommonResult getSeafoodCount(Integer id);
+
+    CommonResult getSeafoodCountByList(String[] listIdCount);
 }

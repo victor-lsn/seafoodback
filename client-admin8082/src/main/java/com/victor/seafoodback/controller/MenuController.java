@@ -17,8 +17,14 @@ public class MenuController {
     private AdminService adminService;
 
     @PostMapping("/menu")
-    public CommonResult getMenu() {
-        return adminService.getMenu();
+    public CommonResult getMenu(@RequestParam("roleId")Integer roleId) {
+        return adminService.getMenu(roleId);
+    }
+
+    @PostMapping("/allMenu")
+    public CommonResult getAllMenu() {
+        return adminService.getAllMenu();
+//        return menuService.getMenuByRoleId(roleId);
     }
 
     @PostMapping("/addMenu")
@@ -35,5 +41,36 @@ public class MenuController {
         menu.setParent(parent);
         menu.setIcon(icon);*/
         return adminService.addMenu(name, path, parent, icon);
+    }
+
+    @PostMapping("/getOrderCountByMonth")
+    public CommonResult getOrderCountByMonth(){
+        return adminService.getOrderCountByMonth();
+    }
+
+    @PostMapping("/getOrderMoneyByMonth")
+    public CommonResult getOrderMoneyByMonth(){
+        return adminService.getOrderMoneyByMonth();
+    }
+
+    @PostMapping("/getSaleCountByCategory")
+    public CommonResult getSaleCountByCategory(){
+        return adminService.getSaleCountByCategory();
+    }
+
+    @PostMapping("/getOrderCountMap")
+    public CommonResult getOrderCountMap(){
+        return adminService.getOrderCountMap();
+    }
+
+    @RequestMapping("/getMenuById")
+    public CommonResult getMenuById(@RequestParam("id") Integer permissionId) {
+        return adminService.getMenuById(permissionId);
+    }
+
+    @RequestMapping("/updateMenuById")
+    public CommonResult updateMenuById(Menu menu) {
+        System.out.println(menu);
+        return adminService.updateMenuById(menu);
     }
 }

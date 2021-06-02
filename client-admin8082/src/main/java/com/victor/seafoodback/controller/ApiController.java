@@ -13,15 +13,13 @@ import com.victor.seafoodback.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -36,7 +34,8 @@ public class ApiController {
     public static String alipay_public_key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi2UdZPSGDranxXKeNYioLopZ9EO+2k2zRr5MGSLefb+ysYaLdEZ0C5ETBwOEgFjdqKd7HYi/P+7yIxWROFMQxF/pkEZ5Z42BObYPp84Ew9qWM+bjGIoAyalrbi7Oldjgc/iCcCC8wjsFzkdi2fSgeCTAu6ZDuT+WPlNTk7YaUz4yiMeznaZQyckULj0cghsjgComMeTr7i54QFZA8XVQ16aFvJbRTEmaoVYeDDG7veqgYHZpxRE9QMiJpTdhxhviSXjlIm4SfT/5pkL472lsHA9MHuf/UdHar1D1Krzq9l2S72D7IkIqRPAa9lvC/Lhowl/wLcCo8pEEPaHKhx3GVQIDAQAB";
 
     // 服务器异步通知页面路径  需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-    public static String notify_url = "http://192.168.43,118:9527/admin/alipay/return_url";
+    //public static String notify_url = "http://192.168.43,118:9527/admin/alipay/return_url";
+    public static String notify_url = "http://127.0.0.1:9006/alipay/notify_url";
 
     // 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
     //public static String return_url = "http://127.0.0.1:8080/order";
@@ -95,6 +94,60 @@ public class ApiController {
 
 
         orderService.addOrder1(userId, seafoodId, addrId, out_trade_no);
+
+        //请求
+        String result = "";
+        try {
+            result = alipayClient.pageExecute(alipayRequest).getBody();
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+        }
+
+        //输出
+        response.setContentType("text/html;charset=" + charset);
+        response.getWriter().write(result);// 直接将完整的表单html输出到页面
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+
+    @RequestMapping("/toPay2")
+    public void toPay2(HttpServletRequest request, HttpServletResponse response, String name, String info,
+                       Integer userId, @RequestParam("seafoodList[]") String[] seafoodList, Integer addrId,
+                       Double pay) throws Exception {
+        System.out.println(name);
+        System.out.println(info);
+        System.out.println(userId);
+        System.out.println(Arrays.toString(seafoodList));
+        System.out.println(addrId);
+        System.out.println(pay);
+        //获得初始化的AlipayClient
+        AlipayClient alipayClient = new DefaultAlipayClient(gatewayUrl, app_id, merchant_private_key, "json", charset, alipay_public_key, sign_type);
+        //设置请求参数
+        AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
+        alipayRequest.setReturnUrl(return_url);
+        alipayRequest.setNotifyUrl(notify_url);
+        //商户订单号，商户网站订单系统中唯一订单号，必填
+        String out_trade_no = UUID.randomUUID().toString();
+        System.out.println("out_trade_no=" + out_trade_no);
+
+
+        //付款金额，必填
+        String total_amount = String.valueOf(pay);
+        System.out.println(total_amount);
+        //订单名称，必填
+        String subject = name;
+        //商品描述，可空
+        String body = info;
+
+        alipayRequest.setBizContent("{\"out_trade_no\":\"" + out_trade_no + "\","
+                + "\"total_amount\":\"" + total_amount + "\","
+                + "\"subject\":\"" + subject + "\","
+                + "\"body\":\"" + body + "\","
+                + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
+
+
+       // orderService.addOrder1(userId, seafoodId, addrId, out_trade_no);
+        orderService.addOrder2(userId, seafoodList, addrId, pay,out_trade_no);
 
         //请求
         String result = "";

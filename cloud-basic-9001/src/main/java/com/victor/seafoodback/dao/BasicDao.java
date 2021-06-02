@@ -13,4 +13,6 @@ public interface BasicDao {
     int getUserByPhone(String phone);
 
     User login(User user);
+
+    Integer getUserStatus(User user);
 }

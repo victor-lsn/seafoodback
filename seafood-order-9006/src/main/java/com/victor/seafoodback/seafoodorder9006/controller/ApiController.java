@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/admin")
 public class ApiController {
     // 应用ID,您的APPID，收款账号既是您的APPID对应支付宝账号
     public static String app_id = "2021000117626392";

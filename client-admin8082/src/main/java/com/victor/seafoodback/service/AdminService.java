@@ -6,6 +6,7 @@ import com.victor.seafoodback.entity.Role;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
@@ -15,7 +16,10 @@ import java.util.Arrays;
 public interface AdminService {
 
     @PostMapping("/menu")
-    CommonResult getMenu();
+    CommonResult getMenu(@RequestParam("roleId")Integer roleId);
+
+    @PostMapping("/allMenu")
+    public CommonResult getAllMenu();
 
     @PostMapping("/addMenu")
     public CommonResult addMenu(@RequestParam(value = "name") String name, @RequestParam(value = "path", required = false) String path,
@@ -35,4 +39,22 @@ public interface AdminService {
 
     @PostMapping("/addRolePermission")
     public CommonResult addRolePermission(@RequestParam("currentIdList") String currentIdList,@RequestParam("roleId")Integer roleId);
+
+    @PostMapping("/getOrderCountByMonth")
+    public CommonResult getOrderCountByMonth();
+
+    @PostMapping("/getOrderMoneyByMonth")
+    public CommonResult getOrderMoneyByMonth();
+
+    @PostMapping("/getSaleCountByCategory")
+    public CommonResult getSaleCountByCategory();
+
+    @PostMapping("/getOrderCountMap")
+    public CommonResult getOrderCountMap();
+
+    @RequestMapping("/getMenuById")
+    public CommonResult getMenuById(@RequestParam("id") Integer permissionId);
+
+    @RequestMapping("/updateMenuById")
+    public CommonResult updateMenuById(Menu menu);
 }

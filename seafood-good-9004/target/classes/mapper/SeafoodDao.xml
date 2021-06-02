@@ -14,6 +14,8 @@
         <result column="sale_date" property="saleDate"/>
         <result column="title" property="title"/>
         <result column="sale_count" property="saleCount"/>
+        <result column="weight" property="weight"/>
+        <result column="seafood_source" property="seafoodSource"/>
         <association property="category" javaType="category">
             <result column="category_id" property="id"/>
             <result column="categoryName" property="name"/>
@@ -34,6 +36,8 @@
         <result column="sale_date" property="saleDate"/>
         <result column="title" property="title"/>
         <result column="sale_count" property="saleCount"/>
+        <result column="weight" property="weight"/>
+        <result column="seafood_source" property="seafoodSource"/>
         <association property="category" javaType="category">
             <result column="category_id" property="id"/>
             <result column="categoryName" property="name"/>
@@ -88,13 +92,14 @@
     </update>
 
     <insert id="addSeafood" parameterType="seafood" useGeneratedKeys="true" keyProperty="id">
-        insert into seafood(name,count,discount,info,in_price,out_price,sale_date,title,category_id)
-        values(#{name},#{count},#{discount},#{info},#{inPrice},#{outPrice},#{saleDate},#{title},#{categoryId})
+        insert into seafood(name,count,discount,info,in_price,out_price,sale_date,title,category_id,weight,seafood_source)
+        values(#{name},#{count},#{discount},#{info},#{inPrice},#{outPrice},#{saleDate},#{title},#{categoryId},#{weight},#{seafoodSource})
     </insert>
 
     <update id="updateSeafood" parameterType="seafood">
         update seafood set name = #{name},count = #{count},discount = #{discount},info = #{info},
-        in_price = #{inPrice},out_price = #{outPrice},title = #{title},category_id = #{categoryId}
+        in_price = #{inPrice},out_price = #{outPrice},title = #{title},category_id = #{categoryId},
+                           weight = #{weight},seafood_source = #{seafoodSource}
         where id = #{id}
     </update>
 
@@ -114,10 +119,10 @@
     </delete>
 
     <insert id="batchAddSeafood" parameterType="list" useGeneratedKeys="true" keyProperty="id">
-        insert into seafood(name,count,discount,info,in_price,out_price,sale_date,title,category_id)
+        insert into seafood(name,count,discount,info,in_price,out_price,sale_date,title,category_id,weight,seafood_source)
         values
         <foreach collection ="list" item="seafood" separator =",">
-            (#{seafood.name},#{seafood.count},#{seafood.discount},#{seafood.info},#{seafood.inPrice},#{seafood.outPrice},#{seafood.saleDate},#{seafood.title},#{seafood.categoryId})
+            (#{seafood.name},#{seafood.count},#{seafood.discount},#{seafood.info},#{seafood.inPrice},#{seafood.outPrice},#{seafood.saleDate},#{seafood.title},#{seafood.categoryId},#{seafood.weight},#{seafood.seafoodSource})
         </foreach >
     </insert>
 
@@ -131,7 +136,7 @@
 
     <select id="getFireGood" resultMap="SeafoodMap2">
         select a.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
-        from category,(select seafood.* from seafood  ORDER BY sale_count DESC limit 11 ) as a
+        from category,(select seafood.* from seafood  ORDER BY sale_count DESC limit 10 ) as a
         right join seafood_pic on a.id = seafood_pic.seafood_id
         where a.category_id = category.id
     </select>
@@ -178,7 +183,7 @@
         </if>
     </select>
 
-    <select id="getAllGoods" resultMap="SeafoodMap3">
+    <select id="getAllGoods" resultMap="SeafoodMap2">
         select seafood.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
         from seafood,category,seafood_pic
         where seafood.category_id = category.id order by out_price ${paixu}
@@ -197,4 +202,43 @@
         select * from seafood_pic where seafood_id = #{id}
     </select>
 
+    <select id="getSearchGoods" resultMap="SeafoodMap2">
+        select a.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
+        from category,(select seafood.* from seafood where name like concat('%',#{keywords},'%')
+                                                        or title like concat('%',#{keywords},'%')
+                                                        or info like concat('%',#{keywords},'%')) as a
+                          right join seafood_pic on a.id = seafood_pic.seafood_id
+        where a.category_id = category.id
+        <if test="categoryId != null">
+            and category_id = #{categoryId}
+        </if>
+        ORDER BY a.out_price ${paixu}
+    </select>
+
+    <select id="getCategoryById" resultType="category">
+        select * from category where id = #{categoryId}
+    </select>
+
+    <select id="getSecondCategory" resultType="integer">
+        select id from category where parent = #{categoryId}
+    </select>
+
+
+    <select id="getSearchGoods2" resultMap="SeafoodMap2">
+        select a.*,category.id categoryId, category.name categoryName,category.category_desc,category.level,category.parent,seafood_pic.id pic_id,seafood_pic.name pic_name
+        from category,(select seafood.* from seafood where name like concat('%',#{keywords},'%')
+        or title like concat('%',#{keywords},'%')
+        or info like concat('%',#{keywords},'%')) as a
+        right join seafood_pic on a.id = seafood_pic.seafood_id
+        where a.category_id = category.id
+        and category_id in
+        <foreach collection="categoryIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        ORDER BY a.out_price ${paixu}
+    </select>
+
+    <select id="getSeafoodCount" resultType="integer">
+        select seafood.count from seafood where id = #{id}
+    </select>
 </mapper>

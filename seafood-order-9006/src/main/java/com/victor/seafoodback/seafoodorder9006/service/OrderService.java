@@ -10,7 +10,7 @@ public interface OrderService {
 
     CommonResult addOrder1(Integer userId,Integer seafoodId,Integer addrId,String serialNumber);
 
-    CommonResult addOrder2(Integer userId,String[] seafoodList,Integer addrId,Double pay);
+    CommonResult addOrder2(Integer userId,String[] seafoodList,Integer addrId,Double pay,String serialNumber);
 
     CommonResult getAllOrder(String serialNumber, Date lowDate,Date highDate,Integer pageNo,Integer pageSize,String status);
 

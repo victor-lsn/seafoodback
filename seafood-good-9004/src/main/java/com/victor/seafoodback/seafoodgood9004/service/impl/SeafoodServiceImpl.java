@@ -3,6 +3,7 @@ package com.victor.seafoodback.seafoodgood9004.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.victor.seafoodback.entity.Category;
 import com.victor.seafoodback.entity.CommonResult;
 import com.victor.seafoodback.entity.Seafood;
 import com.victor.seafoodback.entity.SeafoodPic;
@@ -55,10 +56,10 @@ public class SeafoodServiceImpl implements SeafoodService {
     @Override
     public CommonResult updateSeafood(Seafood seafood, String picName) {
         seafoodDao.updateSeafood(seafood);
-        if (picName!=null){
+        if (picName != null) {
             HashMap<String, Object> map = new HashMap<>();
-            map.put("seafoodId",seafood.getId());
-            map.put("picName",picName);
+            map.put("seafoodId", seafood.getId());
+            map.put("picName", picName);
             if (seafoodDao.getSeafoodPic(map) == 0) {
                 seafoodDao.addGoodPic(new SeafoodPic(null, picName, seafood.getId(), null));
             }
@@ -67,22 +68,22 @@ public class SeafoodServiceImpl implements SeafoodService {
     }
 
     @Override
-    public CommonResult deleteSeafoodPic(Integer seafoodId,String picName) {
+    public CommonResult deleteSeafoodPic(Integer seafoodId, String picName) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("seafoodId",seafoodId);
-        map.put("picName",picName);
+        map.put("seafoodId", seafoodId);
+        map.put("picName", picName);
         seafoodDao.deleteSeafoodPic(map);
-        return new CommonResult(200,"删除照片成功");
+        return new CommonResult(200, "删除照片成功");
     }
 
     @Override
     public CommonResult deleteSeafood(Integer id) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("seafoodId",id);
-        map.put("picName",null);
+        map.put("seafoodId", id);
+        map.put("picName", null);
         seafoodDao.deleteSeafoodPic(map);
         seafoodDao.deleteSeafood(id);
-        return new CommonResult(200,"删除海鲜产品成功");
+        return new CommonResult(200, "删除海鲜产品成功");
     }
 
     @Override
@@ -94,24 +95,63 @@ public class SeafoodServiceImpl implements SeafoodService {
             String[] splits = pics.split("/");
             //根据seafoodVoExcel
             for (String split : splits) {
-                seafoodPics.add(new SeafoodPic(null,split,seafoodVoExcel.getId(),null));
+                seafoodPics.add(new SeafoodPic(null, split, seafoodVoExcel.getId(), null));
             }
         }
         seafoodDao.batchSeafoodPic(seafoodPics);
-        return new CommonResult(200,"批量插入成功");
+        return new CommonResult(200, "批量插入成功");
     }
 
     @Override
     public CommonResult getFireGood() {
-        log.info("top10的数量："+seafoodDao.getFireGood().size());
-        return new CommonResult(200,"获取销量最高top10成功",seafoodDao.getFireGood());
+        log.info("top10的数量：" + seafoodDao.getFireGood().size());
+        return new CommonResult(200, "获取销量最高top10成功", seafoodDao.getFireGood());
     }
 
     @Override
     public CommonResult getAllGoods(String name, Double lowPrice, Double highPrice, String paixu, Integer pageNo, Integer pageSize) {
-        PageHelper.startPage(pageNo, pageSize);
+        //PageHelper.startPage(pageNo, pageSize);
         List<Seafood> allGoods = seafoodDao.getAllGoods(name, lowPrice, highPrice, paixu);
+        System.out.println("所有商品：" + allGoods);
         return new CommonResult(200, "获取商品成功", new PageInfo<>(allGoods));
+    }
+
+    @Override
+    public CommonResult getSearchGoods(String keywords, String paixu, Integer categoryId) {
+        System.out.println("商品分类ID" + categoryId);
+        if (categoryId == null || seafoodDao.getCategoryById(categoryId).getLevel() == 2) {
+            List<Seafood> searchGoods = seafoodDao.getSearchGoods(keywords, paixu, categoryId);
+            return new CommonResult(200, "搜索商品成功", searchGoods);
+        }
+        //一级分类
+        List<Integer> secondCategory = seafoodDao.getSecondCategory(categoryId);
+        List<Seafood> searchGoods = seafoodDao.getSearchGoods2(keywords, paixu, secondCategory);
+        return new CommonResult(200, "搜索商品成功", searchGoods);
+    }
+
+    @Override
+    public CommonResult getSeafoodCount(Integer id) {
+        return new CommonResult(200, "成功获取海鲜的库存", seafoodDao.getSeafoodCount(id));
+    }
+
+    @Override
+    public CommonResult getSeafoodCountByList(String[] listIdCount) {
+        for (String s : listIdCount) {
+
+            String[] idCount = s.split("-");
+
+            if (idCount.length == 1) {
+                System.out.println(s);
+            } else {
+                Integer seafoodCount = seafoodDao.getSeafoodCount(Integer.parseInt(idCount[0]));
+                if (seafoodCount < Integer.parseInt(idCount[1])) {
+                    Seafood seafood = seafoodDao.getSeafoodById(Integer.parseInt(idCount[0]));
+                    return new CommonResult(444, seafood.getName() + "商品库存不足");
+                }
+            }
+
+        }
+        return new CommonResult(200, "库存充足");
     }
 
 

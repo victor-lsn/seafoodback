@@ -22,4 +22,13 @@
     <select id="getParentCategoryVo" resultType="com.victor.seafoodback.vo.CategoryVo">
         select * from category where level = 1
     </select>
+
+    <select id="getCategoryById" resultType="category">
+        select * from category where id = #{id}
+    </select>
+
+    <update id="updateCategory">
+        update category set name = #{name},category_desc = #{categoryDesc},parent = #{parent},
+                            level = #{level} where id = #{id}
+    </update>
 </mapper>

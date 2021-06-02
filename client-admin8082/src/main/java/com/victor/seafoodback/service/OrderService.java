@@ -18,7 +18,7 @@ public interface OrderService {
 
     @PostMapping("/addOrder2")
     public CommonResult addOrder2(@RequestParam("userId")Integer userId,@RequestParam("seafoodList[]")String[] seafoodList,
-                                  @RequestParam("addrId")Integer addrId, @RequestParam("pay")Double pay);
+                                  @RequestParam("addrId")Integer addrId, @RequestParam("pay")Double pay,@RequestParam("serialNumber")String serialNumber);
 
     @PostMapping("/getAllOrder")
     public CommonResult getAllOrder(@RequestParam(value = "serialNumber",required = false)String serialNumber,

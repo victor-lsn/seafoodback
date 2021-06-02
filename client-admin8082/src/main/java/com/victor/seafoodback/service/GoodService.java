@@ -1,6 +1,7 @@
 package com.victor.seafoodback.service;
 
 
+import com.victor.seafoodback.entity.Category;
 import com.victor.seafoodback.entity.CommonResult;
 import feign.Headers;
 import feign.codec.Encoder;
@@ -11,10 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
@@ -55,14 +53,17 @@ public interface GoodService {
                                    @RequestParam("outPrice")Double outPrice,@RequestParam("count")Integer count,
                                    @RequestParam("discount")Double discount,@RequestParam("categoryId")Integer categoryId,
                                    @RequestParam("title")String title,@RequestParam("info")String info,
-                                   @RequestParam("picName")String picName);
+                                   @RequestParam("picName")String picName,@RequestParam("weight")Float weight,
+                                   @RequestParam("seafoodSource")String seafoodSource);
 
     @PostMapping("/updateSeafood")
     public CommonResult updateSeafood(@RequestParam("name") String name,@RequestParam("inPrice") Double inPrice,
                                       @RequestParam("outPrice")Double outPrice,@RequestParam("count")Integer count,
                                       @RequestParam("discount")Double discount,@RequestParam("categoryId")Integer categoryId,
                                       @RequestParam("title")String title,@RequestParam("info")String info,
-                                      @RequestParam(value = "picName",required = false)String picName,@RequestParam("id")Integer id);
+                                      @RequestParam(value = "picName",required = false)String picName,@RequestParam("id")Integer id,
+                                      @RequestParam("weight")Float weight,
+                                      @RequestParam("seafoodSource")String seafoodSource);
 
     @PostMapping("/deleteSeafoodPic")
     public CommonResult deleteSeafoodPic(@RequestParam("id")Integer id,@RequestParam("name")String name);
@@ -89,4 +90,21 @@ public interface GoodService {
                                     @RequestParam(value = "paixu") String paixu,
                                     @RequestParam("pageNo")Integer pageNo,
                                     @RequestParam("pageSize")Integer pageSize);
+
+    @PostMapping("/getSearchGoods")
+    public CommonResult getSearchGoods(@RequestParam(value = "keywords",required = false) String keywords,
+                                       @RequestParam("paixu") String paixu,
+                                       @RequestParam(value = "categoryId",required = false)Integer categoryId);
+
+    @RequestMapping("/getCategoryById")
+    public CommonResult getCategoryById(@RequestParam("id") Integer id);
+
+    @RequestMapping("/updateCategory")
+    public CommonResult updateCategory(@RequestBody Category category);
+
+    @PostMapping("/getSeafoodCount")
+    public CommonResult getSeafoodCount(@RequestParam("id") Integer id);
+
+    @PostMapping("/getSeafoodCountByList")
+    public CommonResult getSeafoodCountByList(@RequestParam("seafoodList[]") String[] seafoodList);
 }

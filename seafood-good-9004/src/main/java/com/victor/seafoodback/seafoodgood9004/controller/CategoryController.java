@@ -4,9 +4,7 @@ import com.victor.seafoodback.entity.Category;
 import com.victor.seafoodback.entity.CommonResult;
 import com.victor.seafoodback.seafoodgood9004.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 @RestController
@@ -41,5 +39,15 @@ public class CategoryController {
     @PostMapping("/getParentCategoryVo")
     public CommonResult getParentCategoryVo(){
         return categoryService.getParentCategoryVo();
+    }
+
+    @RequestMapping("/getCategoryById")
+    public CommonResult getCategoryById(@RequestParam("id") Integer id) {
+        return categoryService.getCategoryById(id);
+    }
+
+    @RequestMapping("/updateCategory")
+    public CommonResult updateCategory(@RequestBody Category category){
+       return categoryService.updateCategory(category);
     }
 }

@@ -23,8 +23,8 @@ public class OrderController {
 
     @PostMapping("/addOrder2")
     public CommonResult addOrder2(@RequestParam("userId") Integer userId, @RequestParam("seafoodList[]") String[] seafoodList,
-                                  @RequestParam("addrId") Integer addrId, @RequestParam("pay") Double pay) {
-        return orderService.addOrder2(userId, seafoodList, addrId, pay);
+                                  @RequestParam("addrId") Integer addrId, @RequestParam("pay") Double pay,@RequestParam("serialNumber")String serialNumber) {
+        return orderService.addOrder2(userId, seafoodList, addrId, pay,serialNumber);
     }
 
     @PostMapping("/getAllOrder")

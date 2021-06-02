@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.victor.seafoodback.dao.StatisticsDao">
+
+    <select id="getOrderCountByMonth" resultType="map">
+        select sum(a.1) `1`,
+        sum(a.2) `2`,
+        sum(a.3) `3`,
+        sum(a.4) `4`,
+        sum(a.5) `5`,
+        sum(a.6) `6`,
+        sum(a.7) `7`,
+               0 `8`,
+               0 `9`,
+               0 `10`,
+               0 `11`,
+               0 `12`
+        from
+        (
+        select count(1) `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-1-1' and create_date <![CDATA[<]]> '2021-2-1'
+        union
+        select 0 `1`,
+        count(1) `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-2-1' and create_date <![CDATA[<]]> '2021-3-1'
+        union
+        select 0 `1`,
+        0 `2`,
+        count(1) `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-3-1' and create_date <![CDATA[<]]> '2021-4-1'
+        union
+        select 0 `1`,
+        0 `2`,
+        0 `3`,
+        count(1) `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`  from shop_order where create_date >= '2021-4-1' and create_date <![CDATA[<]]> '2021-5-1'
+        union
+        select 0 `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        count(1) `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`  from shop_order where create_date >= '2021-5-1' and create_date <![CDATA[<]]> '2021-6-1'
+        union
+        select 0 `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        count(1) `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`  from shop_order where create_date >= '2021-6-1' and create_date <![CDATA[<]]> '2021-7-1'
+        union
+        select 0 `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        count(1) `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`  from shop_order where create_date >= '2021-7-1' and create_date <![CDATA[<]]> '2021-8-1'
+        ) as a
+    </select>
+
+    <select id="getOrderMoneyByMonth" resultType="map">
+        select sum(a.1) `1`,
+        sum(a.2) `2`,
+        sum(a.3) `3`,
+        sum(a.4) `4`,
+        sum(a.5) `5`,
+        sum(a.6) `6`,
+        sum(a.7) `7`,
+        sum(a.8) `8`,
+        sum(a.9) `9`,
+        sum(a.10) `10`,
+        sum(a.11) `11`,
+        sum(a.12) `12`
+        from (
+        select
+        IFNULL(sum(pay),0) `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-1-1' and create_date <![CDATA[<]]> '2021-2-1'
+        union
+        select  0 `1`,
+        IFNULL(sum(pay),0) `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-2-1' and create_date <![CDATA[<]]> '2021-3-1'
+        union
+        select  0 `1`,
+        0 `2`,
+        IFNULL(sum(pay),0) `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-3-1' and create_date <![CDATA[<]]> '2021-4-1'
+        union
+        select  0 `1`,
+        0 `2`,
+        0 `3`,
+        IFNULL(sum(pay),0) `4`,
+        0 `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-4-1' and create_date <![CDATA[<]]> '2021-5-1'
+        union
+        select  0 `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        IFNULL(sum(pay),0) `5`,
+        0 `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-5-1' and create_date <![CDATA[<]]> '2021-6-1'
+        union
+        select  0 `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        IFNULL(sum(pay),0) `6`,
+        0 `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-6-1' and create_date <![CDATA[<]]> '2021-7-1'
+        union
+        select  0 `1`,
+        0 `2`,
+        0 `3`,
+        0 `4`,
+        0 `5`,
+        0 `6`,
+        IFNULL(sum(pay),0) `7`,
+        0 `8`,
+        0 `9`,
+        0 `10`,
+        0 `11`,
+        0 `12`
+        from shop_order where create_date >= '2021-7-1' and create_date <![CDATA[<]]> '2021-8-1'
+        )as a;
+    </select>
+
+    <select id="getSaleCountByCategory" resultType="integer">
+        select IFNULL(sum(sale_count),0) sale_count from seafood,category
+        where seafood.category_id = category.id and category.parent = #{categoryParentId}
+    </select>
+
+    <select id="getFirstLevelCategory" resultType="category">
+        select * from category where level = 1
+    </select>
+
+    <select id="getOrderCountMap" resultType="map">
+        select sum(a.dayCount) dayCount,
+        sum(a.yearCount) yearCount
+        from
+        (
+        select count(*) dayCount,0 yearCount from shop_order
+        where create_date >= #{nowDay}
+        union
+        select 0 dayCount, count(*) yearCount from shop_order
+        where create_date >= #{nowYear} and create_date <![CDATA[<]]> #{nextYear}) as a
+    </select>
+
+</mapper>

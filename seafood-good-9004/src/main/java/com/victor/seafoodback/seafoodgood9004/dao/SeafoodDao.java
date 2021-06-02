@@ -1,5 +1,6 @@
 package com.victor.seafoodback.seafoodgood9004.dao;
 
+import com.victor.seafoodback.entity.Category;
 import com.victor.seafoodback.entity.Seafood;
 import com.victor.seafoodback.entity.SeafoodPic;
 import com.victor.seafoodback.vo.SeafoodVoExcel;
@@ -43,5 +44,17 @@ public interface SeafoodDao {
     List<Seafood> getAllGoods(@Param("name")String name, @Param("lowPrice")Double lowPrice, @Param("highPrice")Double highPrice,
                               @Param("paixu")String paixu);
 
+    List<Seafood> getSearchGoods(@Param("keywords")String keywords,
+                                 @Param("paixu")String paixu,
+                                 @Param("categoryId")Integer categoryId);
 
+    Category getCategoryById(@Param("categoryId") Integer categoryId);
+
+    List<Integer> getSecondCategory(@Param("categoryId") Integer categoryId);
+
+    List<Seafood> getSearchGoods2(@Param("keywords")String keywords,
+                                 @Param("paixu")String paixu,
+                                 @Param("categoryIds")List<Integer> categoryIds);
+
+    Integer getSeafoodCount(@Param("id") Integer id);
 }

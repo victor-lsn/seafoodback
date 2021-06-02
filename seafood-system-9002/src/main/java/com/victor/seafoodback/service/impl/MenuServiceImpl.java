@@ -32,6 +32,26 @@ public class MenuServiceImpl implements MenuService {
         return new CommonResult(444, "添加失败");
     }
 
+    @Override
+    public CommonResult getMenuByRoleId(Integer roleId) {
+        List<Menu> menu = menuDao.getMenuByRoleId(roleId);
+        return new CommonResult(200,"根据角色获取菜单成功",getChildrenList(menu));
+    }
+
+    @Override
+    public CommonResult getMenuById(Integer permissionId) {
+        return new CommonResult(200,"根据ID获取权限成功",menuDao.getMenuById(permissionId));
+    }
+
+    @Override
+    public CommonResult updateMenuById(Menu menu) {
+        Integer status = menuDao.updateMenuById(menu);
+        if (status != 1){
+            return new CommonResult(444,"修改权限信息失败",null);
+        }
+        return new CommonResult(200,"修改权限信息成功",null);
+    }
+
     public List<Menu> getChildrenList(List<Menu> allMenu) {
         ArrayList<Menu> menus = new ArrayList<>();
         for (Menu menu : allMenu) {

@@ -70,14 +70,14 @@ public class GoodController {
     }
 
     @PostMapping("/getSeafoodById")
-    public CommonResult getSeafoodById(@RequestParam("id")Integer id){
+    public CommonResult getSeafoodById(@RequestParam("id") Integer id) {
         return goodService.getSeafoodById(id);
     }
 
     @PostMapping("/uploadGoodPic")
-    public CommonResult uploadGoodPic(@RequestParam(value = "file",required = false) MultipartFile file){
+    public CommonResult uploadGoodPic(@RequestParam(value = "file", required = false) MultipartFile file) {
         if (file.isEmpty()) {
-            return new CommonResult(444,"上传失败");
+            return new CommonResult(444, "上传失败");
         }
         //创建输入输出流
         InputStream inputStream = null;
@@ -95,7 +95,7 @@ public class GoodController {
             //如果之前的 String path = "d:/upload/" 没有在最后加 / ，那就要在 path 后面 + "/"
 
             //判断文件父目录是否存在
-            if(!targetFile.getParentFile().exists()){
+            if (!targetFile.getParentFile().exists()) {
                 //不存在就创建一个
                 targetFile.getParentFile().mkdir();
             }
@@ -106,11 +106,11 @@ public class GoodController {
             FileCopyUtils.copy(inputStream, outputStream);
 
             //告诉页面上传成功了
-            return new CommonResult(200,"上传成功");
+            return new CommonResult(200, "上传成功");
         } catch (IOException e) {
             e.printStackTrace();
             //出现异常，则告诉页面失败
-            return new CommonResult(200,"上传失败");
+            return new CommonResult(200, "上传失败");
         } finally {
             //无论成功与否，都有关闭输入输出流
             if (inputStream != null) {
@@ -131,45 +131,48 @@ public class GoodController {
     }
 
     @PostMapping("/addSeafood")
-    public CommonResult addSeafood(@RequestParam("name") String name,@RequestParam("inPrice") Double inPrice,
-                                   @RequestParam("outPrice")Double outPrice,@RequestParam("count")Integer count,
-                                   @RequestParam("discount")Double discount,@RequestParam("categoryId")Integer categoryId,
-                                   @RequestParam("title")String title,@RequestParam("info")String info,
-                                   @RequestParam("picName")String picName){
-        return goodService.addSeafood(name, inPrice, outPrice, count, discount, categoryId, title, info, picName);
+    public CommonResult addSeafood(@RequestParam("name") String name, @RequestParam("inPrice") Double inPrice,
+                                   @RequestParam("outPrice") Double outPrice, @RequestParam("count") Integer count,
+                                   @RequestParam("discount") Double discount, @RequestParam("categoryId") Integer categoryId,
+                                   @RequestParam("title") String title, @RequestParam("info") String info,
+                                   @RequestParam("picName") String picName, @RequestParam("weight") Float weight,
+                                   @RequestParam("seafoodSource") String seafoodSource) {
+        return goodService.addSeafood(name, inPrice, outPrice, count, discount, categoryId, title, info, picName, weight, seafoodSource);
     }
 
     @PostMapping("/updateSeafood")
-    public CommonResult updateSeafood(@RequestParam("name") String name,@RequestParam("inPrice") Double inPrice,
-                                      @RequestParam("outPrice")Double outPrice,@RequestParam("count")Integer count,
-                                      @RequestParam("discount")Double discount,@RequestParam("categoryId")Integer categoryId,
-                                      @RequestParam("title")String title,@RequestParam("info")String info,
-                                      @RequestParam(value = "picName",required = false)String picName,@RequestParam("id")Integer id){
-        return goodService.updateSeafood(name, inPrice, outPrice, count, discount, categoryId, title, info, picName, id);
+    public CommonResult updateSeafood(@RequestParam("name") String name, @RequestParam("inPrice") Double inPrice,
+                                      @RequestParam("outPrice") Double outPrice, @RequestParam("count") Integer count,
+                                      @RequestParam("discount") Double discount, @RequestParam("categoryId") Integer categoryId,
+                                      @RequestParam("title") String title, @RequestParam("info") String info,
+                                      @RequestParam(value = "picName", required = false) String picName, @RequestParam("id") Integer id,
+                                      @RequestParam("weight") Float weight,
+                                      @RequestParam("seafoodSource") String seafoodSource) {
+        return goodService.updateSeafood(name, inPrice, outPrice, count, discount, categoryId, title, info, picName, id, weight, seafoodSource);
     }
 
     @PostMapping("/deleteSeafoodPic")
-    public CommonResult deleteSeafoodPic(@RequestParam("id")Integer id,@RequestParam("name")String name){
-        return goodService.deleteSeafoodPic(id,name);
+    public CommonResult deleteSeafoodPic(@RequestParam("id") Integer id, @RequestParam("name") String name) {
+        return goodService.deleteSeafoodPic(id, name);
     }
 
     @PostMapping("/deleteSeafood")
-    public CommonResult deleteSeafood(@RequestParam("id")Integer id){
+    public CommonResult deleteSeafood(@RequestParam("id") Integer id) {
         return goodService.deleteSeafood(id);
     }
 
     @PostMapping("/uploadExcel")
-    public CommonResult uploadExcel(@RequestPart(value = "file") MultipartFile file){
+    public CommonResult uploadExcel(@RequestPart(value = "file") MultipartFile file) {
         return goodService.batchAddSeafood(file);
     }
 
     @PostMapping("/getParentCategoryVo")
-    public CommonResult getParentCategoryVo(){
+    public CommonResult getParentCategoryVo() {
         return goodService.getParentCategoryVo();
     }
 
     @PostMapping("/getFireGood")
-    public CommonResult getFireGood(){
+    public CommonResult getFireGood() {
         return goodService.getFireGood();
     }
 
@@ -178,8 +181,36 @@ public class GoodController {
                                     @RequestParam(value = "lowPrice", required = false) Double lowPrice,
                                     @RequestParam(value = "highPrice", required = false) Double highPrice,
                                     @RequestParam(value = "paixu") String paixu,
-                                    @RequestParam("pageNo")Integer pageNo,
-                                    @RequestParam("pageSize")Integer pageSize) {
+                                    @RequestParam("pageNo") Integer pageNo,
+                                    @RequestParam("pageSize") Integer pageSize) {
         return goodService.getAllGoods(name, lowPrice, highPrice, paixu, pageNo, pageSize);
+    }
+
+    @PostMapping("/getSearchGoods")
+    public CommonResult getSearchGoods(@RequestParam(value = "keywords", required = false) String keywords,
+                                       @RequestParam("paixu") String paixu,
+                                       @RequestParam(value = "categoryId", required = false) Integer categoryId) {
+        System.out.println(keywords);
+        return goodService.getSearchGoods(keywords, paixu, categoryId);
+    }
+
+    @RequestMapping("/getCategoryById")
+    public CommonResult getCategoryById(@RequestParam("id") Integer id) {
+        return goodService.getCategoryById(id);
+    }
+
+    @RequestMapping("/updateCategory")
+    public CommonResult updateCategory(Category category) {
+        return goodService.updateCategory(category);
+    }
+
+    @PostMapping("/getSeafoodCount")
+    public CommonResult getSeafoodCount(@RequestParam("id") Integer id) {
+        return goodService.getSeafoodCount(id);
+    }
+
+    @PostMapping("/getSeafoodCountByList")
+    public CommonResult getSeafoodCountByList(@RequestParam("seafoodList[]") String[] seafoodList) {
+        return goodService.getSeafoodCountByList(seafoodList);
     }
 }
