@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class SeafoodExcelListener extends AnalysisEventListener<SeafoodVoExcel> {
     //集合大小达到5条就插入数据
-    private static final int BATCH_COUNT = 5;
+    private static final int BATCH_COUNT = 7;
 
     private List<SeafoodVoExcel> list = new ArrayList<>();
 
@@ -35,6 +35,7 @@ public class SeafoodExcelListener extends AnalysisEventListener<SeafoodVoExcel> 
         if (list.size() >= BATCH_COUNT) {
             //存储数据
             seafoodService.batchAddSeafood(list);
+            list.clear();
         }
     }
 
