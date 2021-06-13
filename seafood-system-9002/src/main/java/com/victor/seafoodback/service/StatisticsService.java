@@ -14,4 +14,10 @@ public interface StatisticsService {
     CommonResult getSaleCountByCategory();
 
     CommonResult getOrderCountMap();
+
+    CommonResult getOrderCountMap2(Integer year);
+
+    CommonResult getOrderCountByMonth2(String year);
+
+    CommonResult getOrderMoneyByMonth2(String year);
 }

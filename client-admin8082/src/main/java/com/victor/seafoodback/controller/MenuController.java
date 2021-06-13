@@ -73,4 +73,19 @@ public class MenuController {
         System.out.println(menu);
         return adminService.updateMenuById(menu);
     }
+
+    @PostMapping("/getOrderCountByMonth2")
+    public CommonResult getOrderCountByMonth2(@RequestParam("year") String year){
+        return adminService.getOrderCountByMonth2(year);
+    }
+
+    @PostMapping("/getOrderMoneyByMonth2")
+    public CommonResult getOrderMoneyByMonth2(@RequestParam("year") String year){
+        return adminService.getOrderMoneyByMonth2(year);
+    }
+
+    @PostMapping("/getOrderCountMap2")
+    public CommonResult getOrderCountMap2(@RequestParam("year") Integer year){
+        return adminService.getOrderCountMap2(year);
+    }
 }

@@ -22,17 +22,16 @@ public class StatisticsServiceImpl implements StatisticsService {
     private StatisticsDao statisticsDao;
 
 
-
     @Override
     public CommonResult getOrderCountByMonth() {
         Map<Integer, Integer> orderCountByMonth = statisticsDao.getOrderCountByMonth();
-        return new CommonResult(200,"获取每月订单成功",orderCountByMonth);
+        return new CommonResult(200, "获取每月订单成功", orderCountByMonth);
     }
 
     @Override
     public CommonResult getOrderMoneyByMonth() {
         Map<Integer, Double> orderMoneyByMonth = statisticsDao.getOrderMoneyByMonth();
-        return new CommonResult(200,"获取每月销售额成功",orderMoneyByMonth);
+        return new CommonResult(200, "获取每月销售额成功", orderMoneyByMonth);
     }
 
     @Override
@@ -42,11 +41,11 @@ public class StatisticsServiceImpl implements StatisticsService {
         HashMap<String, Integer> map = new HashMap<>();
         for (Category category : firstLevelCategory) {
             Integer count = statisticsDao.getSaleCountByCategory(category.getId());
-            map.put(category.getName(),count);
+            map.put(category.getName(), count);
         }
 
         System.out.println(map);
-        return new CommonResult(200,"获取每种分类成功",map);
+        return new CommonResult(200, "获取每种分类销量成功", map);
     }
 
     @Override
@@ -58,8 +57,28 @@ public class StatisticsServiceImpl implements StatisticsService {
         System.out.println(nowDay);
         System.out.println(nowYear);
         System.out.println(nextYear);
-        return new CommonResult(200,"获取今日与今年订单数成功",
-                statisticsDao.getOrderCountMap(nowDay,nowYear,nextYear));
+        return new CommonResult(200, "获取今日与今年订单数成功",
+                statisticsDao.getOrderCountMap(nowDay, nowYear, nextYear));
+    }
+
+    @Override
+    public CommonResult getOrderCountMap2(Integer year) {
+        Date date = new Date();
+        String nowDay = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        System.out.println(nowDay);
+        Integer nextYear = year + 1;
+        return new CommonResult(200, "获取今日与今年订单数成功",
+                statisticsDao.getOrderCountMap(nowDay, year.toString(), nextYear.toString()));
+    }
+
+    @Override
+    public CommonResult getOrderCountByMonth2(String year) {
+        return new CommonResult(200, year + "年度订单数量数据获取成功", statisticsDao.getOrderCountByMonth2(year));
+    }
+
+    @Override
+    public CommonResult getOrderMoneyByMonth2(String year) {
+        return new CommonResult(200, year + "年度订单金额数据获取成功", statisticsDao.getOrderMoneyByMonth2(year));
     }
 
 

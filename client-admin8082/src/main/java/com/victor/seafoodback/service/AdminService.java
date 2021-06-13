@@ -57,4 +57,13 @@ public interface AdminService {
 
     @RequestMapping("/updateMenuById")
     public CommonResult updateMenuById(Menu menu);
+
+    @PostMapping("/getOrderCountByMonth2")
+    public CommonResult getOrderCountByMonth2(@RequestParam("year") String year);
+
+    @PostMapping("/getOrderMoneyByMonth2")
+    public CommonResult getOrderMoneyByMonth2(@RequestParam("year") String year);
+
+    @PostMapping("/getOrderCountMap2")
+    public CommonResult getOrderCountMap2(@RequestParam("year") Integer year);
 }

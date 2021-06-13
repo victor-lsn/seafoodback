@@ -15,7 +15,11 @@ public interface StatisticsDao {
 
     Map<Integer, Integer> getOrderCountByMonth();
 
+    Map<Integer, Integer> getOrderCountByMonth2(@Param("year") String year);
+
     Map<Integer, Double> getOrderMoneyByMonth();
+
+    Map<Integer, Double> getOrderMoneyByMonth2(@Param("year") String year);
 
     Integer getSaleCountByCategory(@Param("categoryParentId") Integer categoryParentId);
 
